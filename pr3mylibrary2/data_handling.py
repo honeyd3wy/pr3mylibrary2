@@ -163,8 +163,8 @@ class MergeMongoDB(GetFromMongoDB):
     def __init__(self):
         pass
 
-    def merge_all_data(self):
-        dir = str(Path(__file__).parent.parent)
+    def merge_all_data(self, dir):
+
         database, _ = super().your_collection('JY')
         COLLECTION_NAME = 'total_userdata'
 
