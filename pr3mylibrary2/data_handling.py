@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pandas as pd
 from pathlib import Path
-import sqlite3
+
 import json
 import sys
 
@@ -194,10 +194,10 @@ class MergeMongoDB(GetFromMongoDB):
 
         collection.insert_many(documents=records)
 
-        # DB에 저장
-        df_sql = transform_df(df_result)
-        conn = sqlite3.connect(f'{dir}/total_userdata/fake.db')
-        df_sql.to_sql(f'{dir}/total_userdata/total_userdata.db', conn, if_exists='replace')
+        # # DB에 저장
+        # df_sql = transform_df(df_result)
+        # conn = sqlite3.connect(f'{dir}/total_userdata/fake.db')
+        # df_sql.to_sql(f'{dir}/total_userdata/total_userdata.db', conn, if_exists='replace')
 
         return df_result
 
