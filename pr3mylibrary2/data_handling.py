@@ -1,7 +1,6 @@
 from pymongo import MongoClient
 import pandas as pd
 from pathlib import Path
-
 import json
 import sys
 
@@ -56,7 +55,7 @@ class MongoCollection(Mongo):
 
     def your_collection(self, your_name):
         """
-        DB와 콜렉션을 반환합니다.
+        클라이언트 객체, DB와 콜렉션을 반환합니다.
         """
         COLLECTION_NAME = f'{your_name}_collection'
         DATABASE_NAME, MONGO_URI = super().connect_info()
@@ -65,7 +64,7 @@ class MongoCollection(Mongo):
         database = client[DATABASE_NAME]
         collection = database[COLLECTION_NAME]
 
-        return database, collection
+        return client, database, collection
 
 
 class Features:
@@ -123,11 +122,12 @@ class SaveToMongoDB(MongoCollection, MyTracksInfoList):
         """
         mongoDB collection에 내 트랙리스트 데이터를 저장합니다.
         """
-        _, collection = super().your_collection(self.your_name)
+        client, database, collection = super().your_collection(self.your_name)
         _, df = super().get_info()
         records= json.loads(df.to_json(orient='records'))
 
         collection.insert_many(documents=records)
+        client.close()
         
 
 
@@ -139,8 +139,10 @@ class GetFromMongoDB(MongoCollection):
         """
         mongoDB에 저장된 collection을 DataFrame으로 불러옵니다.
         """
-        _, collection = super().your_collection(your_name)
+        client, database, collection = super().your_collection(your_name)
         doc = collection.find({})
+        client.close()
+
         df = pd.DataFrame(doc)
         result_df = df.sample(frac=1).reset_index(drop=True)
 
@@ -165,7 +167,7 @@ class MergeMongoDB(GetFromMongoDB):
 
     def merge_all_data(self, dir):
 
-        database, _ = super().your_collection('JY')
+        client, database, collection = super().your_collection('JY')
         COLLECTION_NAME = 'total_userdata'
 
         your_names = [s.replace('_collection', '') for s in database.list_collection_names()]
@@ -193,6 +195,7 @@ class MergeMongoDB(GetFromMongoDB):
             database[COLLECTION_NAME].drop()
 
         collection.insert_many(documents=records)
+        client.close()
 
         # # DB에 저장
         # df_sql = transform_df(df_result)
@@ -208,8 +211,8 @@ class DeleteUser(MergeMongoDB):
 
     def delete_yourname(self, your_name):
         COLLECTION_NAME = f'{your_name}_collection'
-        database, _ = super().your_collection(your_name=your_name)
+        client, database, collection = super().your_collection(your_name=your_name)
         database[COLLECTION_NAME].drop()
+        client.close()
 
-        # DB에 덮어씌우기
         
