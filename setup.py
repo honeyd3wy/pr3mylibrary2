@@ -7,7 +7,7 @@ setup(
     author = 'honeyd3wy',
     author_email = 'holysjy0410@gmail.com',
     packages = ['pr3mylibrary2'],
-    py_modules=['data_handling', 'model'],
+    py_modules=['data_handling'],
     install_requires=['aiohttp==3.7.4.post0',
     'aniso8601==9.0.1',
     'async-timeout==3.0.1',
