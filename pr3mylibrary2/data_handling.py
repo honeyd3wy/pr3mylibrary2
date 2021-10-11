@@ -196,8 +196,8 @@ class MergeMongoDB(GetFromMongoDB):
 
         # DB에 저장
         df_sql = transform_df(df_result)
-        conn = sqlite3.connect(f'{dir}/my_app/total_userdata/fake.db')
-        df_sql.to_sql(f'{dir}/my_app/total_userdata/total_userdata.db', conn, if_exists='replace')
+        conn = sqlite3.connect(f'{dir}/total_userdata/fake.db')
+        df_sql.to_sql(f'{dir}/total_userdata/total_userdata.db', conn, if_exists='replace')
 
         return df_result
 
@@ -212,4 +212,4 @@ class DeleteUser(MergeMongoDB):
         database[COLLECTION_NAME].drop()
 
         # DB에 덮어씌우기
-        super().merge_all_data()
+        
