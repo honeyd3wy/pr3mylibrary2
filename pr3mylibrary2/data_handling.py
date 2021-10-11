@@ -183,7 +183,7 @@ class MergeMongoDB(GetFromMongoDB):
         df_result = df_concat.drop(['type', 'uri', 'track_href', 'analysis_url'], axis=1)
         df_result['liked'] = pd.to_numeric(df_result['liked'])
 
-        df_result.to_csv(f'{dir}/my_app/total_userdata/total_userdata.csv')
+        df_result.to_csv(f'{dir}/total_userdata/total_userdata.csv')
 
         #mongoDB에 저장
         collection = database[COLLECTION_NAME]
