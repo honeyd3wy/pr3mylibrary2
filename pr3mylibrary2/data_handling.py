@@ -68,6 +68,9 @@ class MongoCollection(Mongo):
 
 
 class Features:
+    """
+    만들 모델의 target(str)과 features(list)를 반환해줍니다.
+    """
     def __init__(self) -> None:
         pass
 
@@ -166,7 +169,10 @@ class MergeMongoDB(GetFromMongoDB):
         pass
 
     def merge_all_data(self, dir):
-
+        """
+        MongoDB에 있는 모든 유저의 데이터를 합쳐줍니다.
+        운영자의 추천용 플레이리스트는 포함되지 않습니다.
+        """
         client, database, collection = super().your_collection('JY')
         COLLECTION_NAME = 'total_userdata'
 
@@ -206,6 +212,9 @@ class MergeMongoDB(GetFromMongoDB):
 
 
 class DeleteUser(MergeMongoDB):
+    """
+    MongoDB에서 콜렉션을 삭제합니다.(회원 탈퇴와 비슷한 역할)
+    """
     def __init__(self):
         super().__init__()
 
